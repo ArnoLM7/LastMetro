@@ -1,0 +1,52 @@
+services:
+  api:
+    build: .
+    image: dm-api:v1
+    environment:
+      - PORT=5000
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=metro_project_db
+      - POSTGRES_PORT=5432
+    ports:
+      - "5000:5000"
+    depends_on:
+      - metro_project_db
+    networks:
+      - "metro_project_network"
+
+  swagger:
+    image: swaggerapi/swagger-ui:5
+    environment:
+      - SWAGGER_JSON=/openapi/openapi.yaml
+    volumes:
+      - ./openapi:/usr/share/nginx/html/openapi:ro
+    ports:
+      - "8080:8080"
+    depends_on:
+      - api
+
+  last_metro_db:
+    container_name: "last_metro_db"
+    image: postgres:latest
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5434:5434"
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: "${POSTGRES_DB}"
+    env_file:
+      - .env
+    networks:
+      - "last_metro_network"
+
+volumes:
+  postgres_data:
+
+networks:
+  last_metro_network:
+    driver: bridge
