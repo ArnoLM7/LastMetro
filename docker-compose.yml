@@ -12,12 +12,12 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - metro_project_db
+      - last_metro_db
     networks:
-      - "metro_project_network"
+      - "last_metro_network"
 
   swagger:
-    image: swaggerapi/swagger-ui:5
+    image: swaggerapi/swagger-ui:latest
     environment:
       - SWAGGER_JSON=/openapi/openapi.yaml
     volumes:
@@ -26,6 +26,8 @@ services:
       - "8080:8080"
     depends_on:
       - api
+    networks:
+      - "last_metro_network"
 
   last_metro_db:
     container_name: "last_metro_db"
@@ -33,8 +35,9 @@ services:
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     ports:
-      - "5434:5434"
+      - "5432:5432"
     environment:
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
