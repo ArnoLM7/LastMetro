@@ -1,7 +1,9 @@
 const express = require("express");
+const pool = require("./db/db");
 const app = express();
+const usersRouter = require("./users");
 
-const port = process.env.PORT || 5000;
+app.use(express.json());
 
 app.get("/", (req, res) => {
 	return res.status(200).send({
@@ -9,8 +11,20 @@ app.get("/", (req, res) => {
 	});
 });
 
-app.listen(port, () => {
-	console.log("Listening on " + port);
+app.use("/users", usersRouter);
+
+app.get("/test-db", async (req, res) => {
+	try {
+		const result = await pool.query("SELECT NOW()");
+		res.json({ success: true, time: result.rows[0] });
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ success: false, error: err.message });
+	}
+});
+
+app.listen(process.env.PORT || 5000, () => {
+	console.log(`API running on port ${process.env.PORT || 5000}`);
 });
 
 module.exports = app;
