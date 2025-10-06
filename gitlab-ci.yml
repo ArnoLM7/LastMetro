@@ -14,7 +14,7 @@ cache:
   - .npm/
 
 # -----------------------------
-# LINT STAGE (optionnel)
+# LINT STAGE
 # -----------------------------
 
 lint:
