@@ -38,6 +38,7 @@ router.post("/", async (req, res) => {
 		);
 		res.status(201).json(result.rows[0]);
 	} catch (err) {
+		console.error("❌ DB error:", err);
 		res.status(500).json({ error: err.message });
 	}
 });
