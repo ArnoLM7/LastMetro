@@ -5,7 +5,8 @@
 	"main": "server.js",
 	"scripts": {
 		"start": "node server.js",
-		"test": "jest --runInBand"
+		"test": "jest --runInBand",
+		"test:integration": "jest --runInBand --testPathPatterns=integration"
 	},
 	"license": "MIT",
 	"devDependencies": {
