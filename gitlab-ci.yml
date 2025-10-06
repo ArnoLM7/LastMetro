@@ -1,0 +1,54 @@
+stages:
+- lint
+- test
+
+# Variables globales
+variables:
+  NODE_ENV: test
+  npm_config_cache: "$CI_PROJECT_DIR/.npm"
+
+# Cache pour accélérer les builds
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+  - .npm/
+
+# -----------------------------
+# LINT STAGE (optionnel)
+# -----------------------------
+
+lint:
+  stage: lint
+  image: node:20-alpine
+  script:
+  - npm ci
+  - npx eslint . --max-warnings=0
+  only:
+  - merge_requests
+  - main
+
+# -----------------------------
+# TEST STAGE
+# -----------------------------
+test:
+  stage: test
+  image: node:20-alpine
+  services:
+  - name: postgres:15-alpine
+    alias: last_metro_db_test
+  variables:
+    POSTGRES_USER: "last_metro_user_test"
+    POSTGRES_PASSWORD: "last_metro_password_test"
+    POSTGRES_DB: "last_metro_db_test"
+    POSTGRES_HOST: "last_metro_db_test"
+    POSTGRES_PORT: "5432"
+    DB_HOST: "last_metro_db_test"
+    DB_PORT: "5432"
+  script:
+  - echo "📦 Installation des dépendances..."
+  - npm ci
+  - echo "🧪 Lancement des tests unitaires et d'intégration..."
+  - npm test
+  only:
+  - merge_requests
+  - main
