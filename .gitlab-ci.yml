@@ -98,9 +98,15 @@ security:npm-audit:
 
 security:trivy:
   stage: test
-  image: aquasec/trivy:latest
+  image:
+    name: docker:latest
+  services:
+  - docker:dind
   script:
-  - trivy image --format json --output trivy-report.json --severity HIGH,CRITICAL $CI_REGISTRY_IMAGE:latest || true
+  - apk add --no-cache curl
+  - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+  - docker build -t dm-api:latest .
+  - ./trivy image --format json --output trivy-report.json --severity HIGH,CRITICAL dm-api:latest || true
   artifacts:
     when: always
     reports:
@@ -108,6 +114,3 @@ security:trivy:
     paths:
     - trivy-report.json
   allow_failure: true
-  only:
-  - merge_requests
-  - main
