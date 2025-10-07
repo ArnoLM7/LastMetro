@@ -1,5 +1,5 @@
 import js from "@eslint/js";
-import globals, { jest } from "globals";
+import globals from "globals";
 import pluginReact from "eslint-plugin-react";
 import { defineConfig } from "eslint/config";
 
