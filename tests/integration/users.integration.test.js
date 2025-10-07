@@ -1,6 +1,6 @@
 const request = require("supertest");
 const app = require("../../server");
-const pool = require("../../db/db/db");
+const pool = require("../../db/db");
 
 beforeAll(async () => {
 	await pool.query("DELETE FROM users;");
