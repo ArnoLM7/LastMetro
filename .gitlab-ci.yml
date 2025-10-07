@@ -77,3 +77,37 @@ build_docker:
   - docker push $DOCKER_IMAGE:latest
   only:
   - main
+
+# --- Security Scans ---
+security:npm-audit:
+  stage: test
+  image: node:20-alpine
+  script:
+  - npm ci
+  - npm audit --audit-level=moderate --json > npm-audit-report.json || true
+  artifacts:
+    when: always
+    reports:
+      dependency_scanning: npm-audit-report.json
+    paths:
+    - npm-audit-report.json
+  allow_failure: true # Ne bloque pas le pipeline sur des vulnérabilités faibles
+  only:
+  - merge_requests
+  - main
+
+security:trivy:
+  stage: test
+  image: aquasec/trivy:latest
+  script:
+  - trivy image --format json --output trivy-report.json --severity HIGH,CRITICAL $CI_REGISTRY_IMAGE:latest || true
+  artifacts:
+    when: always
+    reports:
+      container_scanning: trivy-report.json
+    paths:
+    - trivy-report.json
+  allow_failure: true
+  only:
+  - merge_requests
+  - main

@@ -6,7 +6,12 @@
 	"scripts": {
 		"start": "node server.js",
 		"test": "jest --runInBand",
-		"test:integration": "jest --runInBand --testPathPatterns=integration"
+		"test:integration": "jest --runInBand --testPathPatterns=integration",
+		"audit": "npm audit --audit-level=high",
+		"push": "git push gitlab main",
+		"log": "git log -1 --stat",
+		"docker:start": "docker compose up --build",
+		"docker:stop": "docker compose down"
 	},
 	"license": "MIT",
 	"devDependencies": {
