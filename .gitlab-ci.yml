@@ -47,6 +47,7 @@ test:
   before_script:
   - apk add --no-cache bash postgresql-client
   - until pg_isready -h $DB_HOST -p $DB_PORT -U $POSTGRES_USER; do echo "Waiting for Postgres..."; sleep 1; done
+  - export PGPASSWORD=$POSTGRES_PASSWORD
   - psql -h $DB_HOST -U $POSTGRES_USER -d $POSTGRES_DB -f db/schema.sql
   script:
   - echo "📦 Installation des dépendances..."
