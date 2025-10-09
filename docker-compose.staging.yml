@@ -16,6 +16,8 @@ services:
 
   postgres-staging:
     image: postgres:15-alpine
+    env_file:
+      - .env.staging
     container_name: last_metro_db_staging
     restart: unless-stopped
     volumes:
