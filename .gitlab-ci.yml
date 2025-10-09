@@ -2,6 +2,7 @@ stages:
 - lint
 - test
 - build
+- deploy
 
 # Variables globales
 variables:
@@ -115,7 +116,7 @@ security:trivy:
     - trivy-report.json
   allow_failure: true
 
-deploy:staging:
+deploy_staging:
   stage: deploy
   image: docker:latest
   services:
