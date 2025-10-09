@@ -26,6 +26,9 @@ app.get("/test-db", async (req, res) => {
 app.get("/health", (req, res) => {
 	return res.status(200).send({
 		message: "OK",
+		service: "Last Metro API",
+		status: "Healthy",
+		timestamp: new Date().toISOString(),
 	});
 });
 
