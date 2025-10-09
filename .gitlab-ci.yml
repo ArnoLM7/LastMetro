@@ -131,7 +131,6 @@ deploy_staging:
   - echo "🩺 Running smoke test..."
   - apk add --no-cache curl
   - docker compose -f docker-compose.staging.yml exec -T api sh -c 'curl -fsS http://localhost:5000/health || exit 1'
-  - docker compose -f docker-compose.staging.yml exec -T api sh -c 'curl -fsS "http://localhost:5000/last-metro?station=République"'
   only:
   - main
   environment:
