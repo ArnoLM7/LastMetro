@@ -61,7 +61,7 @@ services:
       POSTGRES_PASSWORD: "${POSTGRES_TEST_PASSWORD}"
       POSTGRES_DB: "${POSTGRES_TEST_DB}"
     env_file:
-      - .env
+      - .env.test
     networks:
       - "last_metro_network"
 
