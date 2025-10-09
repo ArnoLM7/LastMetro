@@ -15,3 +15,13 @@ If Auto DevOps is not already enabled for this project, you can [turn it on](htt
 This template has a fully-automated dev setup for [Gitpod](https://docs.gitlab.com/ee/integration/gitpod.html).
 
 If you open this project in Gitpod, you'll get all Node dependencies pre-installed.
+
+## 🚀 Déploiement Staging
+
+L'environnement staging permet de tester la version la plus récente avant mise en production.
+
+### 🔧 Déploiement manuel
+
+```bash
+docker compose -f docker-compose.staging.yml up -d
+```

@@ -10,7 +10,7 @@
 		"audit": "npm audit --audit-level=high",
 		"push": "git push gitlab main",
 		"log": "git log -1 --stat",
-		"docker:start": "docker compose up --build",
+		"docker:start": "docker compose up -d",
 		"docker:stop": "docker compose down"
 	},
 	"license": "MIT",

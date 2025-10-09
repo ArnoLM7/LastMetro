@@ -114,3 +114,25 @@ security:trivy:
     paths:
     - trivy-report.json
   allow_failure: true
+
+deploy:staging:
+  stage: deploy
+  image: docker:latest
+  services:
+  - docker:dind
+  script:
+  - echo "🚀 Deployment to Staging..."
+  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+  - docker pull registry.gitlab.com/arnolm7-group/lastmetro/dm-api:latest
+  - docker compose -f docker-compose.staging.yml down || truehttps://tenor.com/view/cat-cat-turning-head-confused-cat-rizalalthur-orange-cat-behavior-gif-10491959385063137392
+  - docker compose -f docker-compose.staging.yml up -d
+  - echo "🩺 Running smoke test..."
+  - apk add --no-cache curl
+  - >
+    if curl -fsS http://localhost:5000/health | grep -q '"status":"ok"'; then echo "✅ Health check OK"; else echo "❌ Health check failed" && docker compose -f docker-compose.staging.yml logs api && exit 1; fi
+  only:
+  - main
+  environment:
+    name: staging
+    url: https://staging.dernier-metro.com
+  when: manual

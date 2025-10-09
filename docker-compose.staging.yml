@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  api:
+    image: registry.gitlab.com/arnolm7-group/lastmetro/dm-api:latest
+    container_name: dm-api-staging
+    restart: unless-stopped
+    env_file:
+      - .env.staging
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres-staging
+    networks:
+      - last_metro_network
+
+  postgres-staging:
+    image: postgres:15-alpine
+    container_name: last_metro_db_staging
+    restart: unless-stopped
+    volumes:
+      - postgres_staging_data:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    environment:
+      POSTGRES_USER: "${POSTGRES_STAGING_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_STAGING_PASSWORD}"
+      POSTGRES_DB: "${POSTGRES_STAGING_DB}"
+    networks:
+      - last_metro_network
+
+volumes:
+  postgres_staging_data:
+
+networks:
+  last_metro_network:
+    driver: bridge
